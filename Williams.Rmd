@@ -1,0 +1,100 @@
+---
+title: "Ted Williams"
+output: html_notebook
+author: "Jim Reed (jdreed@q.com)"
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+
+
+```{r}
+library(tidyverse)
+```
+
+
+```{r, echo=TRUE, message=TRUE, warning=TRUE}
+Master <- read_csv(file = "baseballdatabank-master/core/Master.csv",progress = FALSE )
+Batting <- read_csv(file = "baseballdatabank-master/core/Batting.csv",progress = FALSE )
+names(Batting)[names(Batting) == "3B"] <- "X3B"
+names(Batting)[names(Batting) == "2B"] <- "X2B"
+```
+
+We should recode NA in batting data to 0.
+
+```{r, echo=TRUE}
+library(car)
+Batting$SF <- recode(Batting$SF, "NA = 0")
+Batting$HBP <- recode(Batting$HBP, "NA = 0")
+```
+
+
+Let's lookup Williams's playerID from the master table.
+```{r}
+williams.info <- subset(Master, nameFirst == "Ted" & nameLast =="Williams")
+williams.id <- as.character(williams.info$playerID)
+```
+
+Functions 
+```{r, message=FALSE, warning=FALSE, include=FALSE}
+get_birthyear <- function(player.id) {
+  
+  player.record <- subset(Master, playerID == player.id)
+
+  birthyear <- player.record$birthYear
+  birthmonth <- player.record$birthMonth
+  ifelse(birthmonth >= 7, birthyear +1, birthyear)
+}
+
+get_stats <- function(player.id) {
+  d <- subset(Batting, playerID == player.id)
+  byear <- get_birthyear(player.id)
+  d$Age <- d$yearID - byear
+  d$SLG <- with(d, (H - X2B - X3B - HR + 2 * X2B + 3 * X3B + 4 * HR) / AB)
+  d$OBP <- with(d, (H + BB) / (H + AB + BB + SF))
+  d$OPS <- with(d,SLG + OBP)
+  d$cumH <- with(d,cumsum(H))
+  d$cumAB <- with(d,cumsum(AB))
+  d$cumAvg <- with(d,cumH/cumAB)
+  d
+}
+
+```
+Let's get Ted Williams lifetime stats.
+
+```{r}
+Williams <- get_stats(williams.id)
+```
+
+# Williams Lifetime
+
+Here is a plot of Mickey Mantle's cumulative batting average.  The Mick was able to face many personal regrets at the end of his like.  Alcohol had negatively affected his personal life and his life.  By 1965, Mickey's professional life was in turmoil.  He had numerous injuries and his skills were at their nadir.
+
+In 1966, Ralph Houk advised Mickey that his fans and baseball needed him to play at least one more year.  Mickey had his worst season the year before.  He had hit 255 with 19 home rubs and 19 RBIs.  Although Mickey had appeared in 122 ganes, he only completed 36 in 1965.
+
+From a statistical point of view, Mickey's 1966 season caused his lifetime batting average to fall below 300.
+
+```{r}
+ggplot(data = Williams, aes(yearID,H/AB*1000)) + geom_point() + geom_smooth() + geom_hline(yintercept=400) +
+  geom_rect(aes(xmin=1943, xmax=1945, ymin=-Inf, ymax=Inf)) +
+  ggtitle("Ted Williams Batting Average by Year") + labs(x = "Year", y = "Batting Average") 
+```
+Let's look at Ted Williams' OPS Statistic
+
+
+
+```{r}
+ggplot(data = Williams, aes(yearID,OPS*100)) + geom_point() + geom_smooth() +
+  geom_rect(aes(xmin=1943, xmax=1945, ymin=-Inf, ymax=Inf)) +
+  ggtitle("Ted Williams OPS") + labs(x = "Year", y = "OPS")
+```
+
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Cmd+Option+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Cmd+Shift+K* to preview the HTML file).
+
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Cmd+Option+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Cmd+Shift+K* to preview the HTML file).

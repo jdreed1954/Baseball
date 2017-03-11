@@ -1,0 +1,59 @@
+---
+title: "MLB - Great Hitters"
+author: "Jim Reed (jdreed@q.com)"
+date: "February 19, 2017"
+output: html_notebook
+---
+
+
+
+```{r Init, message=FALSE, echo = FALSE, include=FALSE}
+library(tidyverse)
+source("Baseball_Functions.R")
+options(dplyr.show_progress = FALSE)
+```
+
+```{r GetData, echo=FALSE, message=FALSE, warning=FALSE}
+Master <- getMaster()
+Fielding <- getFielding()
+```
+
+```{r GetB2K, echo=TRUE, message=FALSE, warning=FALSE}
+B2K    <- "Batting.2000.rds"
+B2KRMD <- "Build_Batting_2K.Rmd"
+B2KR   <- "Build_Batting_2K.R"
+if (!file.exists(B2K)) {
+    knitr::knit(B2KRMD, tangle=TRUE)
+    source(B2KR)
+} else {
+    Batting.2000 <- readRDS(B2K)
+}
+```
+
+
+
+
+Let's lookup Mantle's playerID from the master table.
+```{r}
+mantle.info <- subset(Master, nameFirst == "Mickey" & nameLast =="Mantle")
+mantle.id   <- as.character(mantle.info$playerID)
+```
+# Five Similar Players to Mantle
+```{r Similar}
+similar(mantle.id,6)
+
+```
+
+
+```{r}
+d <-  plot.trajectories("Derek", "Jeter", 9, 3)
+S <- d %>% group_by(playerID) %>% do(summarize.trajectory(.))
+#S
+```
+
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Cmd+Option+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Cmd+Shift+K* to preview the HTML file).
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 

@@ -1,0 +1,130 @@
+---
+title: "Mickey Mantle"
+author: "Jim Reed (jdreed@q.com)"
+date: "March 9, 2017"
+output:
+  html_notebook: default
+  html_document: default
+  pdf_document:
+    fig_caption: yes
+    fig_height: 6
+    fig_width: 7
+  word_document: default
+subtitle: A Great and Tragic American Sports Hero
+params:
+  FirstName: Mickey
+  LastName: Mantle
+  runDate: Sys.Date()-1
+---
+Let me get one thing straight from the outset, I am NOT one of those dedicated baseball fans who remembers events of his life around baseball milestones.  My enjoyment of the game does center around following my hometown Rockies game by game, no matter where I am.  I may occasionally look at the standings for the NW West division and note the number of games my team is out of first place.  I might note the latest streak, wins or losses.  My enjoyment of the game comes in being at the park, taking in the cool Rocky Mountain breezes and talking to friends and family while the game progresses.  I do like looking at the various statistics as each batter comes up; his batting average, on-base percentage and slugging percentage.  I take note of the pitcher's ERA and wins/losses and try to keep an eye out for the total number of pitches.  A relaxing day at Coors Field, that is what I enjoy.
+
+I have friends who remember baseball events in excruciating detail, somtimes to amazing lengths.  I heard one fellow comment on an baseball event decades ago.  He remembered the play, a double or a triple play, to be sure.  But, he also remembered the direction and speed of the wind and the exact temperature and humidity reading.  I remember my first experience with French kissing like it was yesterday, but I do not remember a single fact about the weather.  Certainly, I do NOT remember the direction of the wind!
+
+However, as some who know me understand, I do appreciate history and the insight it brings to our collective humanity.  And, I appreciate the constructive manipulation and display of data.  I have been a student of the R language for many years and am always looking for ways to both promote it and demonstrate its power.
+
+So, a couple of developments have come together for me to enhance my enjoyment of baseball and its history.  It turns out that the pursuing the study of **Sabermetrics** brings baseball history to life.  
+
+> **Sabermetrics** is the empirical analysis of baseball, especially baseball statistics that measure in-game activity. Sabermetricians collect and summarize the relevant data from this in-game activity to answer specific questions. The term is derived from the acronym SABR, which stands for the Society for American Baseball Research, founded in 1971. The term sabermetrics was coined by Bill James, who is one of its pioneers and is often considered its most prominent advocate and public face (Reference:  https://en.wikipedia.org/wiki/Sabermetrics).
+
+I first ordered the book *Analyzing Baseball Data with R* by Max Marchi and Jim Albert.  I had just started reading this when a friend told me about an author, Michael Lewis, who has written, among other books, *Flash Boys* and *Moneyball*.  Turns out that *Moneyball* is the story of how **Sabermetrics** was first applied at the Oakland Athletics in 1997 by Billy Beane (General Manager) and Paul DePodesta (statistician).
+
+That brings me to my first foray into Sabermetrics with R and Markdown documents.  I attempt to teach myself the fine points of **Sabermetrics** and illustrate some historical, statistically relevant facts.  What I hope to show, in this document, are some of the more salient baseball statistics about the late, great Mickey Mantle.
+
+\newpage
+
+## `r params$LastName` Batting Statistics by Year and Age
+
+```{r, message=FALSE, echo = FALSE}
+library(tidyverse)
+source("Baseball_Functions.R")
+```
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+Master <- getMaster()
+Batting <- getBatting()
+```
+
+```{r, echo = FALSE}
+player.info <- subset(Master, nameFirst == params$FirstName & nameLast ==params$LastName)
+player.id   <- as.character(player.info$playerID)
+PlayerStats <- get_stats(player.id)
+```
+
+```{r kable, results = 'asis', echo = FALSE}
+columns <- c(2,23,4:17,24:27,30) # 22 values
+c.names = c("Year", "Age", "Team", "Lg",   "G", 
+            "AB",   "R",   "H",    "2B",   "3B", 
+            "HR",   "RBI", "SB",   "CS",   "BB", 
+            "SO",   "Avg", "SLG",  "OBP",  "OPS",
+            "C Avg")
+knitr::kable(PlayerStats[,columns], 
+          caption = "Mantle's Batting Statistics by Year", 
+           col.names = c.names, digits = 3)
+```
+
+\newpage
+
+## Carreer Statistics
+```{r, echo=FALSE}
+
+Player.car <- get_carreer(PlayerStats)
+```
+
+```{r kable2, results = 'asis', echo = FALSE}
+columns <- c(1:16) # 15 values
+c.names = c("Yrs", "G",  "AB",   "R",   "H",    
+            "2B",  "3B", "HR",   "RBI", "BB",   
+            "SO",  "SB", "Avg",  "SLG", "OBP",  "OPS")
+knitr::kable(Player.car[,columns], caption = "Mantle's Carreer Statistics", 
+             col.names = c.names, digits = 3)
+```
+
+
+Below, we display a scatter plot of Mickey's batting average for each season of his career.  The plot is an illustration of a great athlete's ascendancy, plateau and demise.  Mickey's last years were hampered by numerous injuries and flagging abilities.
+
+```{r, message=FALSE, warning=FALSE}
+btitle <- paste(params$FirstName,params$LastName,"Batting Average by Year", sep=" ")
+ggplot(data = PlayerStats, aes(yearID,H/AB*1000)) + 
+  geom_point() + 
+  geom_smooth() + 
+  geom_hline(yintercept=300) +
+  ggtitle(btitle) + labs(x = "Year", y = "Batting Average", 
+                         caption = "Batting Average by Year")
+```
+
+\newpage
+### Mantle's Regret
+
+Here is a plot of Mickey Mantle's cumulative batting average.  The Mick was able to face many personal regrets at the end of his life  Alcohol had negatively affected his personal life and, of course, his health.  By 1965, Mickey's professional life was in turmoil.  He had numerous injuries and his skills were at their nadir.
+
+January, 1966, Ralph Houk advised Mickey that his fans and baseball needed him to play at least one more year.  Mickey had his worst season the year before.  He had hit 255 with 19 home runs and 46 RBIs.  Although Mickey had appeared in 122 games, he only completed 36 in 1965.
+
+Mantle played three more seasons, retiring in 1968. His decisionn to continue playing in 1966 ultimately resulted in his lifetime batting average falling below 300  to 298.
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(data = PlayerStats, aes(yearID,cumAvg*1000)) + 
+  geom_point() + 
+  geom_smooth() + 
+  geom_hline(yintercept=300) +
+  ggtitle("Mantle's Statistical Regret, Lifetime Batting Average Falls below 300 in 1968") + 
+  labs(x = "Year", y = "Cumulative Batting Average",
+       caption = "Mantle Lifetime Cumulative Batting Average")
+```
+
+Bill James, father of Sabermetrics, was an early detractor of the use of raw batting average (H/AB) as a measure of the offensive effectiveness of baseball players.  Batting average does not include walks (BB or HBP).  Additionally, it does not take into account the number of extra-base hits (2B, 3B and HR).  On-base percentage (OBP) takes into account walks and Slugging percentage (SLG) takes into account extra-base hist as well as base hits.  The total effectiveness of an offensive player is then the sum, OBP + SLG, which is referred to as OPS.  
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(data = PlayerStats, aes(Age,OBP)) + 
+  geom_point(aes(x = Age, y = OBP, colour ="OBP")) + 
+  geom_smooth(aes(y = OBP, colour = "OBP")) +
+  geom_point(aes(x = Age, y = SLG, colour = "SLG")) + 
+  geom_smooth(aes(y = SLG, colour = "SLG")) +
+  geom_point(aes(x = Age, y = OPS, colour = "OPS")) + 
+  geom_smooth(aes(y = OPS, colour = "OPS")) +
+  ggtitle("Mickey Mantle's OBP, SLG, OPS = OPB + SLG") + 
+  labs(x = "Age", y = "OBP, SLG & OPS",
+       caption = "Other Offensive Measures of Effectiveness")
+```
+
+Thank you for your patience.
+
+
