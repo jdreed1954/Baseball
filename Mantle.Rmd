@@ -3,19 +3,24 @@ title: "Mickey Mantle"
 author: "Jim Reed (jdreed@q.com)"
 date: "March 9, 2017"
 output:
-  html_notebook: default
-  html_document: default
   pdf_document:
     fig_caption: yes
     fig_height: 6
     fig_width: 7
+  html_notebook: default
+  html_document: default
   word_document: default
 subtitle: A Great and Tragic American Sports Hero
 params:
   FirstName: Mickey
   LastName: Mantle
-  runDate: Sys.Date()-1
+  runDate: !r Sys.Date()
 ---
+
+\centerline{\includegraphics[width=2.0in]{images/Mantle.jpg}}
+
+
+
 Let me get one thing straight from the outset, I am NOT one of those dedicated baseball fans who remembers events of his life around baseball milestones.  My enjoyment of the game does center around following my hometown Rockies game by game, no matter where I am.  I may occasionally look at the standings for the NW West division and note the number of games my team is out of first place.  I might note the latest streak, wins or losses.  My enjoyment of the game comes in being at the park, taking in the cool Rocky Mountain breezes and talking to friends and family while the game progresses.  I do like looking at the various statistics as each batter comes up; his batting average, on-base percentage and slugging percentage.  I take note of the pitcher's ERA and wins/losses and try to keep an eye out for the total number of pitches.  A relaxing day at Coors Field, that is what I enjoy.
 
 I have friends who remember baseball events in excruciating detail, somtimes to amazing lengths.  I heard one fellow comment on an baseball event decades ago.  He remembered the play, a double or a triple play, to be sure.  But, he also remembered the direction and speed of the wind and the exact temperature and humidity reading.  I remember my first experience with French kissing like it was yesterday, but I do not remember a single fact about the weather.  Certainly, I do NOT remember the direction of the wind!
@@ -30,9 +35,8 @@ I first ordered the book *Analyzing Baseball Data with R* by Max Marchi and Jim 
 
 That brings me to my first foray into Sabermetrics with R and Markdown documents.  I attempt to teach myself the fine points of **Sabermetrics** and illustrate some historical, statistically relevant facts.  What I hope to show, in this document, are some of the more salient baseball statistics about the late, great Mickey Mantle.
 
-\newpage
 
-## `r params$LastName` Batting Statistics by Year and Age
+## `r params$LastName` Batting Statistics by Year
 
 ```{r, message=FALSE, echo = FALSE}
 library(tidyverse)
@@ -61,8 +65,6 @@ knitr::kable(PlayerStats[,columns],
            col.names = c.names, digits = 3)
 ```
 
-\newpage
-
 ## Carreer Statistics
 ```{r, echo=FALSE}
 
@@ -78,8 +80,9 @@ knitr::kable(Player.car[,columns], caption = "Mantle's Carreer Statistics",
              col.names = c.names, digits = 3)
 ```
 
+\newpage
 
-Below, we display a scatter plot of Mickey's batting average for each season of his career.  The plot is an illustration of a great athlete's ascendancy, plateau and demise.  Mickey's last years were hampered by numerous injuries and flagging abilities.
+Following, is a scatter plot of Mickey's batting average for each season of his career.  The plot is an illustration of a great athlete's ascendancy, plateau and demise.  Mickey's last years were hampered by numerous injuries and flagging abilities.
 
 ```{r, message=FALSE, warning=FALSE}
 btitle <- paste(params$FirstName,params$LastName,"Batting Average by Year", sep=" ")
@@ -92,6 +95,7 @@ ggplot(data = PlayerStats, aes(yearID,H/AB*1000)) +
 ```
 
 \newpage
+
 ### Mantle's Regret
 
 Here is a plot of Mickey Mantle's cumulative batting average.  The Mick was able to face many personal regrets at the end of his life  Alcohol had negatively affected his personal life and, of course, his health.  By 1965, Mickey's professional life was in turmoil.  He had numerous injuries and his skills were at their nadir.
@@ -125,6 +129,8 @@ ggplot(data = PlayerStats, aes(Age,OBP)) +
        caption = "Other Offensive Measures of Effectiveness")
 ```
 
-Thank you for your patience.
+I hope you enjoyed this statistical journey through a small corner of baseball history.  If you appreciate the power of statical graphics applied to baseball, please let me know. You can reach me at jdreed@q.com.  Please include "baseball" or "sabermetrics" in the subject line of your email.
 
+
+Run date: `r params$runDate`
 
