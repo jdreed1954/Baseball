@@ -1,0 +1,61 @@
+---
+title: "Sabermetrics Primer"
+output: html_notebook
+---
+
+
+To start let us review the definition of Sabermetrics as defined in [Wikipedia](https://en.wikipedia.org/wiki/Sabermetrics).
+
+> **Sabermetrics** is the empirical analysis of baseball, especially baseball statistics that measure in-game activity. Sabermetricians collect and summarize the relevant data from this in-game activity to answer specific questions. The term is derived from the acronym SABR, which stands for the Society for American Baseball Research, founded in 1971. The term sabermetrics was coined by Bill James, who is one of its pioneers and is often considered its most prominent advocate and public face (Reference:  https://en.wikipedia.org/wiki/Sabermetrics).
+
+
+# History and Fashion of Baseball Statistics
+
+Henry Chadwick (October 5, 1824 - April 20, 1908) is considered the Father of Baseball.  He was a sports writer, amateur statistician and historian.  Much of how we percieve baseball is based on his activism in promoting and molding the sport.  For example, a base on balls (BB) or walk was considered a fault or negative of the pitcher with no attribution of benefit or measure of skill on the part of the batter.  In fact, however whenever a batter reaches base it is a benefit to his team and should be reflected in the batter's statistics in a favorable manner.  We will address this further later in this article.
+
+
+Henry Chadwick published [Chadwick's The Game of Baseball](http://www.baseballchronology.com/baseball/Books/Classic/Chadwick_Game_of_Baseball/) in 1868.  This book is a snapshot of the state of the game in the beginning Chadwick is the only baseball journalist/writer to be inducted into the Baseball Hall of Fame.
+Following is a short excerpt from _The Game of Baseball_:
+
+>Between thirty and forty years ago, my favorite field game was the old school-boy sport of Rounders. We used to dig a hole in the ground for the home position, and place four stones in a circle, or nearly so, for the bases, and, choosing up sides, we went in for a lively time at what was the parent game of base ball. When the ball tosser, or "feeder," sent a ball to the bat, and it was hit into the field, the player running round the bases at once became the target of the fielders, their efforts, if the ball was not caught, being directed to hitting him with the ball, in which case he was out, and, failing to do this, they would try and toss the ball into the hole at " home," provided there was no one to take the bat, and, if they were successful, the side at the bat had to retire. When all of the side were put out—each man retiring from play as he was put out—then the field side took the bat, and so the game went on until a certain number of runs were reached —mutually agreed upon—and the party first scoring the required number won the game. Of course the game was merely a source of fun and exercise, but little skill being required to play it, any school-boy being able to learn it in ten minutes. But from this little English acorn of Rounders has the giant American oak of Base Ball grown, and just as much difference exists between the British school-boy sport and our American National game, as between the seedling and the full grown king of the forest.
+
+# What is Batting Average and How is it Calculated
+
+Simply put, one would assume that batting average is a measure of the batters success over many time at bat.  A player said to be batting over 300 is understood to being successful thirty percent of time he is at bat.  The shorthand quoting batting averages is to multiply an average of, say .294 by 1000 and saying a batter has a "294" batting average.  We do this without thinking but keep in mind that batting average is truly a fraction of or less than one, where the numerator is almost always less than the denominator.
+
+## Batting Average
+
+Let us breakdown the formula and talk about its component parts.  The formula for calculating a player's batting average is:
+
+$$BA=\frac{H}{AB}$$
+Batting Average ($BA$) is the quotient of the number of hits ($H$) divided by the number of at bats ($AB$).
+
+## Hit
+
+A hit ($H$) is defined by [Wikipedia](https://en.wikipedia.org/wiki/Hit_(baseball)) thus:
+
+> In baseball statistics, a hit (denoted by H), also called a base hit, is credited to a batter when the batter safely reaches first base after hitting the ball into fair territory, without the benefit of an error or a fielder's choice.
+
+## At Bat
+
+However, the definition of At Bats ($AB$) is mor nuanced, again from [Wikipedia](https://en.wikipedia.org/wiki/At_bat):
+
+> In baseball, an at bat (AB) or time at bat is a batter's turn batting against a pitcher. An at bat is different from a plate appearance. A batter is credited with a plate appearance regardless of what happens during his turn at bat. A batter is credited with an at bat only if that plate appearance does not have one of the results enumerated below. While at bats are used to calculate certain statistics, including batting average and slugging percentage, a player can qualify for the season-ending rankings in these categories only if he accumulates 502 plate appearances during the season.
+
+> A batter will not receive credit for an at bat if their plate appearance ends under the following circumstances:
+
+> * He receives a base on balls (BB).[1]
+* He is hit by a pitch (HBP).
+* He hits a sacrifice fly or a sacrifice bunt (also known as sacrifice hit).
+* He is awarded first base due to interference or obstruction, usually by the catcher.
+* He is replaced by another hitter before his at bat is completed, in which case the plate appearance and any related statistics go to the pinch hitter (unless he is replaced with two strikes and his replacement completes a strikeout, in which case the at bat and strikeout are still charged to the first batter).
+
+> In addition, if the inning ends while he is still at bat (due to the third out being made by a runner caught stealing, for example), no at bat or plate appearance will result.. In this case, the batter will come to bat again in the next inning, though the count will be reset to no balls and no strikes.
+
+In many situations a Plate Appearance might not count as an At Bat.
+
+## Plate Appearance
+
+[Wikipedia defines a Plate Appearance as:](https://en.wikipedia.org/wiki/Plate_appearance)
+
+> In baseball statistics, a player is credited with a plate appearance (denoted by PA) each time he completes a turn batting. A player completes a turn batting when: he strikes out or is declared out before reaching first base; or he reaches first base safely or is awarded first base (by a base on balls, hit by pitch, or catcher's interference); or he hits a fair ball which causes a preceding runner to be put out for the third out before he himself is put out or reaches first base safely (see also left on base, fielder's choice, force play). In other words, a plate appearance ends when the batter is put out or becomes a runner. A very similar statistic, at bats, counts a subset of plate appearances that end under certain circumstances.

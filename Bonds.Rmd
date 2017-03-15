@@ -1,0 +1,231 @@
+---
+title: "Barry Lamar Bonds (born July 24, 2964"
+author: "Jim Reed (jdreed@q.com)"
+date: "March 11, 2017"
+output:
+  html_notebook: default
+  html_document: default
+  pdf_document:
+    fig_caption: yes
+    fig_height: 6
+    fig_width: 7
+  word_document: default
+params:
+  FirstName: Barry
+  LastName: Bonds
+  runDate: Sys.Date()
+subtitle: Exceptional Hitter
+
+#bibliography: bonds_bibliography.bib
+---
+
+\centerline{\includegraphics[width=2.0in]{images/barry-bonds.jpg}}
+
+
+In this article we will focus on the controversial Barry Bonds.  Bonds is the MLB leader in the most career home runs, 762.  He holds the single season record for the most home runs, 73 set in 2001. It is clear that Bonds was an extrodinary baseball player on both offense and defense.  To show how extrordinary Bonds reallt is, I think it is instructive to compare Bonds with another great baseball player, Hank Aaron.
+
+
+# Bonds Career Highlights
+
+
+
+# Value of Graphics to Baseball Insight
+
+
+
+
+
+## `r params$LastName` Batting Statistics by Year
+
+```{r, message=FALSE, echo = FALSE}
+library(tidyverse)
+source("Baseball_Functions.R")
+```
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+Master <- getMaster()
+Batting <- getBatting()
+```
+
+```{r, echo = FALSE}
+player.info <- subset(Master, nameFirst == params$FirstName & nameLast ==params$LastName)
+player.id   <- as.character(player.info$playerID)
+PlayerStats <- get_stats(player.id)
+```
+
+
+
+
+
+```{r kable, results = 'asis', echo = FALSE}
+columns <- c(2,23,4:17,24:27,30) # 22 values
+c.names = c("Year", "Age", "Team", "Lg",   "G", 
+            "AB",   "R",   "H",    "2B",   "3B", 
+            "HR",   "RBI", "SB",   "CS",   "BB", 
+            "SO",   "Avg", "SLG",  "OBP",  "OPS",
+            "C Avg")
+knitr::kable(PlayerStats[,columns], 
+          caption = "Bonds' Batting Statistics by Year", 
+           col.names = c.names, digits = 3)
+```
+
+## Carreer Statistics
+```{r, echo=FALSE}
+
+Player.car <- get_carreer(PlayerStats)
+```
+
+```{r kable2, results = 'asis', echo = FALSE}
+columns <- c(1:16) # 15 values
+c.names = c("Yrs", "G",  "AB",   "R",   "H",    
+            "2B",  "3B", "HR",   "RBI", "BB",   
+            "SO",  "SB", "Avg",  "SLG", "OBP",  "OPS")
+knitr::kable(Player.car[,columns], caption = "Bonds' Carreer Statistics", 
+             col.names = c.names, digits = 3)
+```
+
+```{r Hankkable, results = 'asis', echo = FALSE}
+columns <- c(2,23,4:17,24:27,30) # 22 values
+c.names = c("Year", "Age", "Team", "Lg",   "G", 
+            "AB",   "R",   "H",    "2B",   "3B", 
+            "HR",   "RBI", "SB",   "CS",   "BB", 
+            "SO",   "Avg", "SLG",  "OBP",  "OPS",
+            "C Avg")
+knitr::kable(HankStats[,columns], 
+          caption = "Aaron Batting Statistics by Year", 
+           col.names = c.names, digits = 3)
+```
+## Aaron Carreer Statistics
+```{r, echo=FALSE}
+
+Aaron.car <- get_carreer(HankStats)
+```
+
+```{r Hankkable2, results = 'asis', echo = FALSE}
+columns <- c(1:16) # 15 values
+c.names = c("Yrs", "G",  "AB",   "R",   "H",    
+            "2B",  "3B", "HR",   "RBI", "BB",   
+            "SO",  "SB", "Avg",  "SLG", "OBP",  "OPS")
+knitr::kable(Aaron.car[,columns], caption = "Hank Aaron Carreer Statistics", 
+             col.names = c.names, digits = 3)
+```
+
+
+
+\newpage
+
+Following, is a scatter plot of Barry's batting average for each season of his career.
+
+
+```{r, Hank,echo = FALSE}
+player.info <- subset(Master, nameFirst == "Hank" & nameLast == "Aaron")
+player.id   <- as.character(player.info$playerID)
+HankStats <- get_stats(player.id)
+HankStats <- HankStats %>% mutate(Cum.HR = cumsum(HR))
+Hank.car <- get_carreer(PlayerStats)
+```
+
+```{r, message=FALSE, warning=FALSE}
+btitle <- paste(params$FirstName,params$LastName,"Batting Average by Year", sep=" ")
+ggplot(data = PlayerStats, aes(Age,H/AB*1000)) + 
+     geom_point() + 
+     geom_smooth() +
+     geom_point(data = HankStats, aes()) + 
+     geom_smooth() + 
+     geom_hline(yintercept=300) +
+     ggtitle(btitle) + labs(x = "Year", y = "Batting Average", 
+                         caption = "Batting Average by Year")
+```
+
+\newpage
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(data = PlayerStats, aes(Age,cumAvg*1000, color = "Bonds")) + 
+  geom_point() + 
+  geom_smooth() + 
+  geom_point(data = HankStats, aes(Age, cumAvg * 1000, color = "Aaron")) + 
+  geom_smooth(data = HankStats) + 
+  geom_hline(yintercept=300) +
+  ggtitle("Lifetime Batting Average") + 
+  labs(x = "Age", y = "Cumulative Batting Average",
+       caption = "Hank Aaron & Barry Bonds  - Lifetime Cumulative Batting Averages")
+```
+
+
+## Bonds' Homerun Production
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+plot_caption <- paste(params$LastName, " - Home Runs by Age", sep="")
+ggplot(data = PlayerStats, aes(Age,HR)) + 
+  geom_point() + 
+  geom_smooth() + 
+  ggtitle("Home Run Production by Age") + 
+  labs(x = "Age", y = "Home Runs",
+       caption = plot_caption)
+```
+## Bonds' Cumulative Home Run Production
+
+
+```{r, Ruth,echo = FALSE}
+player.info <- subset(Master, nameFirst == "Babe" & nameLast == "Ruth")
+player.id   <- as.character(player.info$playerID)
+RuthStats <- get_stats(player.id)
+RuthStats <- RuthStats %>% mutate(Cum.HR = cumsum(HR))
+```
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+plot_caption <- paste("Aaron", " - Cumulative Home Run Production", sep="")
+ggplot(data = HankStats, aes(Age,Cum.HR)) + 
+  geom_point() + 
+  geom_line() + 
+ 
+  ggtitle("Cumulative Home Run Production") + 
+  labs(x = "Year", y = "Cumulative Home Runs",
+       caption = plot_caption)
+```
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+PlayerStats <- PlayerStats %>% mutate(Cum.HR = cumsum(HR))
+plot_caption <- paste("Aaron versus Bonds", " - Cumulative Home Run Production", sep="")
+ggplot(data = PlayerStats, aes(Age,Cum.HR, color = "Barry Bonds")) + 
+  geom_point() + 
+  geom_line() + 
+  geom_point(data = HankStats, aes(Age,Cum.HR, color = "Hank Aaron")) +
+  geom_line(data = HankStats) +
+  ggtitle("Cumulative Home Run Production") + 
+  labs(x = "Age", y = "Cumulative Home Runs",
+       caption = plot_caption)
+```
+
+Bill James, father of Sabermetrics, was an early detractor of the use of raw batting average (H/AB) as a measure of the offensive effectiveness of baseball players.  Batting average does not include walks (BB or HBP).  Additionally, it does not take into account the number of extra-base hits (2B, 3B and HR).  On-base percentage (OBP) takes into account walks and Slugging percentage (SLG) takes into account extra-base hist as well as base hits.  The total effectiveness of an offensive player is then the sum, OBP + SLG, which is referred to as OPS.  
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(data = PlayerStats, aes(Age,OBP)) + 
+  geom_point(aes(x = Age, y = OBP, colour ="OBP")) + 
+  geom_smooth(aes(y = OBP, colour = "OBP")) +
+  geom_point(aes(x = Age, y = SLG, colour = "SLG")) + 
+  geom_smooth(aes(y = SLG, colour = "SLG")) +
+  geom_point(aes(x = Age, y = OPS, colour = "OPS")) + 
+  geom_smooth(aes(y = OPS, colour = "OPS")) +
+  ggtitle("Barry Bonds OBP, SLG, OPS = OPB + SLG") + 
+  labs(x = "Age", y = "OBP, SLG & OPS",
+       caption = "Other Offensive Measures of Effectiveness")
+```
+
+I hope you enjoyed this statistical journey through a small corner of baseball history.  If you appreciate the power of statical graphics applied to baseball, please let me know. You can reach me at jdreed@q.com.  Please include "baseball" or "sabermetrics" in the subject line of your email.
+
+
+Run date: `r params$runDate`
+
+\newpage
+
+# References
+
+[Grunk Very Good: A history of baseball statistics](http://www.blessyouboys.com/2013/8/2/4582210/grunk-very-good-a-history-of-baseball-statistics)
+
+[Henry Chadwick](http://baseballhall.org/hof/chadwick-henry)
+
+[Bill James Online](http://www.billjamesonline.com/)
+
+["The Father of Baseball" A Biography of Henry Chadwick by Andrew J. Schiff]()
+
+

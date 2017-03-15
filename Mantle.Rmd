@@ -23,7 +23,7 @@ params:
 
 Let me get one thing straight from the outset, I am NOT one of those dedicated baseball fans who remembers events of his life around baseball milestones.  My enjoyment of the game does center around following my hometown Rockies game by game, no matter where I am.  I may occasionally look at the standings for the NW West division and note the number of games my team is out of first place.  I might note the latest streak, wins or losses.  My enjoyment of the game comes in being at the park, taking in the cool Rocky Mountain breezes and talking to friends and family while the game progresses.  I do like looking at the various statistics as each batter comes up; his batting average, on-base percentage and slugging percentage.  I take note of the pitcher's ERA and wins/losses and try to keep an eye out for the total number of pitches.  A relaxing day at Coors Field, that is what I enjoy.
 
-I have friends who remember baseball events in excruciating detail, somtimes to amazing lengths.  I heard one fellow comment on an baseball event decades ago.  He remembered the play, a double or a triple play, to be sure.  But, he also remembered the direction and speed of the wind and the exact temperature and humidity reading.  I remember my first experience with French kissing like it was yesterday, but I do not remember a single fact about the weather.  Certainly, I do NOT remember the direction of the wind!
+I have friends who remember baseball events in excruciating detail, sometimes to amazing lengths.  I heard one fellow comment on an baseball event decades ago.  He remembered the play, a double or a triple play, to be sure.  But, he also remembered the direction and speed of the wind and the exact temperature and humidity reading.  I remember my first experience with French kissing like it was yesterday, but I do not remember a single fact about the weather.  Certainly, I do NOT remember the direction of the wind!
 
 However, as some who know me understand, I do appreciate history and the insight it brings to our collective humanity.  And, I appreciate the constructive manipulation and display of data.  I have been a student of the R language for many years and am always looking for ways to both promote it and demonstrate its power.
 
@@ -102,7 +102,7 @@ Here is a plot of Mickey Mantle's cumulative batting average.  The Mick was able
 
 January, 1966, Ralph Houk advised Mickey that his fans and baseball needed him to play at least one more year.  Mickey had his worst season the year before.  He had hit 255 with 19 home runs and 46 RBIs.  Although Mickey had appeared in 122 games, he only completed 36 in 1965.
 
-Mantle played three more seasons, retiring in 1968. His decisionn to continue playing in 1966 ultimately resulted in his lifetime batting average falling below 300  to 298.
+Mantle played three more seasons, retiring in 1968. His decision to continue playing in 1966 ultimately resulted in his lifetime batting average falling below 300  to 298.
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 ggplot(data = PlayerStats, aes(yearID,cumAvg*1000)) + 
@@ -129,7 +129,7 @@ ggplot(data = PlayerStats, aes(Age,OBP)) +
        caption = "Other Offensive Measures of Effectiveness")
 ```
 
-I hope you enjoyed this statistical journey through a small corner of baseball history.  If you appreciate the power of statical graphics applied to baseball, please let me know. You can reach me at jdreed@q.com.  Please include "baseball" or "sabermetrics" in the subject line of your email.
+I hope you enjoyed this statistical journey through a small corner of baseball history.  If you appreciate the power of statistical graphics applied to baseball, please let me know. You can reach me at jdreed@q.com.  Please include "baseball" or "sabermetrics" in the subject line of your email.
 
 
 Run date: `r params$runDate`
