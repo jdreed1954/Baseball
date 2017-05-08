@@ -1,45 +1,55 @@
 ---
-title: "Barry Lamar Bonds (born July 24, 2964"
+title: "Barry Lamar Bonds"
 author: "Jim Reed (jdreed@q.com)"
 date: "March 11, 2017"
 output:
-  html_notebook: default
-  html_document: default
   pdf_document:
     fig_caption: yes
-    fig_height: 6
-    fig_width: 7
+  html_notebook: default
+  html_document: default
   word_document: default
+subtitle: 
 params:
   FirstName: Barry
   LastName: Bonds
   runDate: Sys.Date()
-subtitle: Exceptional Hitter
-
-#bibliography: bonds_bibliography.bib
 ---
 
-\centerline{\includegraphics[width=2.0in]{images/barry-bonds.jpg}}
+\centerline{\includegraphics[width=2.0in]{images/barry_bonds.jpg}}
 
 
-In this article we will focus on the controversial Barry Bonds.  Bonds is the MLB leader in the most career home runs, 762.  He holds the single season record for the most home runs, 73 set in 2001. It is clear that Bonds was an extrodinary baseball player on both offense and defense.  To show how extrordinary Bonds reallt is, I think it is instructive to compare Bonds with another great baseball player, Hank Aaron.
 
 
-# Bonds Career Highlights
+Barry Lamar Bonds was born on July 24, 1964 in Riverside, California.  His father, Bobby Bonds,is a formr major league baseball player. Bobby played fourteen years in the majors with various teams in both the American and National leagues.  His longest stint was with the San Francisco Giants (1967-74).
 
+Barry Bonds was a multi-sport athelete in high scool, playing baseball, basketball and football.  He batted .467 his senior year and was named prep All-American.[Wikipedia](https://en.wikipedia.org/wiki/Barry_Bonds#Early_life).
+
+Bonds was drafted by the San Francisco Giants but he and the franchise could not come to an amicable agreement on salary.  Bonds' minimum to go pro was $75,000.  The Giants highest offer was $70,000.  So, he decided to go college.
+
+Bonds attended Arizon State University. After college, the Pittsbugh Pirates drafted Bonds.  He played for the Pirates from 1986 until 1992.  As a free agent in 1993, Bonds signed with the San Francisco Giants for whom he played for the remainder of his career (1993-2007).
+
+In this article we will focus on Barry Bonds and his phenomenal baseball career.  Among other records, Bonds is the MLB leader in the most career home runs, 762.  He holds the single season record for the most home runs, 73, set in 2001. It is clear that Bonds was an extrodinary baseball player on both offense and defense.  
+
+
+To show how extrordinary Bonds really is, it is instructive to compare Bonds with another great baseball player. In this particular comparison, we will use Hank Aaron.  
 
 
 # Value of Graphics to Baseball Insight
+Graphics and statistics can enhance one's understanding and insight to sport.  
 
 
+\newpage
 
-
-
-## `r params$LastName` Batting Statistics by Year
+## Bonds Batting Statistics by Year
 
 ```{r, message=FALSE, echo = FALSE}
 library(tidyverse)
 source("Baseball_Functions.R")
+if (!require("RColorBrewer")) {
+install.packages("RColorBrewer")
+library(RColorBrewer)
+}
+
 ```
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 Master <- getMaster()
@@ -52,10 +62,6 @@ player.id   <- as.character(player.info$playerID)
 PlayerStats <- get_stats(player.id)
 ```
 
-
-
-
-
 ```{r kable, results = 'asis', echo = FALSE}
 columns <- c(2,23,4:17,24:27,30) # 22 values
 c.names = c("Year", "Age", "Team", "Lg",   "G", 
@@ -64,23 +70,20 @@ c.names = c("Year", "Age", "Team", "Lg",   "G",
             "SO",   "Avg", "SLG",  "OBP",  "OPS",
             "C Avg")
 knitr::kable(PlayerStats[,columns], 
-          caption = "Bonds' Batting Statistics by Year", 
+          caption = "Bonds Batting Statistics by Year", 
            col.names = c.names, digits = 3)
 ```
 
-## Carreer Statistics
-```{r, echo=FALSE}
+\newpage
 
-Player.car <- get_carreer(PlayerStats)
-```
+## Hank Aaron Batting Statistics by Year
 
-```{r kable2, results = 'asis', echo = FALSE}
-columns <- c(1:16) # 15 values
-c.names = c("Yrs", "G",  "AB",   "R",   "H",    
-            "2B",  "3B", "HR",   "RBI", "BB",   
-            "SO",  "SB", "Avg",  "SLG", "OBP",  "OPS")
-knitr::kable(Player.car[,columns], caption = "Bonds' Carreer Statistics", 
-             col.names = c.names, digits = 3)
+```{r, Hank,echo = FALSE}
+player.info <- subset(Master, nameFirst == "Hank" & nameLast == "Aaron")
+player.id   <- as.character(player.info$playerID)
+HankStats <- get_stats(player.id)
+HankStats <- HankStats %>% mutate(Cum.HR = cumsum(HR))
+Hank.car <- get_career(PlayerStats)
 ```
 
 ```{r Hankkable, results = 'asis', echo = FALSE}
@@ -94,18 +97,23 @@ knitr::kable(HankStats[,columns],
           caption = "Aaron Batting Statistics by Year", 
            col.names = c.names, digits = 3)
 ```
-## Aaron Carreer Statistics
-```{r, echo=FALSE}
 
-Aaron.car <- get_carreer(HankStats)
+## Carreer Statistics for Aaron and Bonds
+```{r, echo=FALSE}
+Aaron.car <- get_career(HankStats)
+
+Bonds.car <- get_career(PlayerStats)
+Car.comb <- rbind(Aaron.car, Bonds.car)
+Car.comb$Player <- c("Hank Aaron", "Barry Bonds") 
+Car.comb <- select(Car.comb,Player,1:16)
 ```
 
-```{r Hankkable2, results = 'asis', echo = FALSE}
-columns <- c(1:16) # 15 values
-c.names = c("Yrs", "G",  "AB",   "R",   "H",    
+```{r kable2, results = 'asis', echo = FALSE}
+columns <- c(1:17)
+c.names = c("Name", "Yrs", "G",  "AB",   "R",   "H",    
             "2B",  "3B", "HR",   "RBI", "BB",   
             "SO",  "SB", "Avg",  "SLG", "OBP",  "OPS")
-knitr::kable(Aaron.car[,columns], caption = "Hank Aaron Carreer Statistics", 
+knitr::kable(Car.comb[,columns], caption = "Aaron and Bonds Carreer Statistics", 
              col.names = c.names, digits = 3)
 ```
 
@@ -113,36 +121,128 @@ knitr::kable(Aaron.car[,columns], caption = "Hank Aaron Carreer Statistics",
 
 \newpage
 
-Following, is a scatter plot of Barry's batting average for each season of his career.
+Following, is a scatter plot of Barry's batting average for each season of his career.  The size of the sample points correspond to his OPS for that season.  OPS is the sum of his Onbase Percentage (OBP) and his Slugging score (SLG).
+
+Note the unique shape of the curve as he begins career reaches a peak in his late twenties, plateaus for several years with a significant dip when he 34 years old.  Then, a miraculous surge in both his battting average as well his OPS performance.
+
+At 36 (2001) he turns in his most productive season, hitting a record 73 home runs, batting .328, OBP of .863 and SLG of .411.  His OPS was 1.274.  The year after, Bonds hit a career high of .370.
+
+Bonds played until 2007, age 42.  His batting average had fallen to .276 but achieved a very respectable .963 OPS.
+
+To conclude, both the shape of the overall batting average curve as well as the magnitude of the surge late in Bonds' career are atypical.  I leve it up the reader to interpret the cause and significance of these data.
 
 
-```{r, Hank,echo = FALSE}
-player.info <- subset(Master, nameFirst == "Hank" & nameLast == "Aaron")
-player.id   <- as.character(player.info$playerID)
-HankStats <- get_stats(player.id)
-HankStats <- HankStats %>% mutate(Cum.HR = cumsum(HR))
-Hank.car <- get_carreer(PlayerStats)
-```
-
-```{r, message=FALSE, warning=FALSE}
+```{r BondsAvg, echo=FALSE, message=FALSE, warning=FALSE}
 btitle <- paste(params$FirstName,params$LastName,"Batting Average by Year", sep=" ")
-ggplot(data = PlayerStats, aes(Age,H/AB*1000)) + 
-     geom_point() + 
-     geom_smooth() +
-     geom_point(data = HankStats, aes()) + 
-     geom_smooth() + 
+ggplot() + 
+     geom_point(data = PlayerStats, aes(Age,H/AB*1000, size = OPS)) + 
+     geom_smooth(data = PlayerStats, aes(Age, H/AB*1000), fill = "blue", colour = "darkblue") +
      geom_hline(yintercept=300) +
-     ggtitle(btitle) + labs(x = "Year", y = "Batting Average", 
+     ggtitle(btitle) + labs(x = "Age", y = "Batting Average", 
                          caption = "Batting Average by Year")
 ```
+
+# Hank Aaron
+
+Hank Aaron, active in MLB 1954 to 1976, was not a contemporary of Barry Bonds, but his profile is one of the prototypical great hitter.  He grew to his peak in his late twenties and then experienced a gradual decline over his remaining years in baseball.  In the book _Analyzing Baseball Data with R_ by Max Marchi and Jim Albert, the authors characterize this a "career trajectory" and model it as  
+
+
+
+```{r HankAvg, echo=FALSE, message=FALSE, warning=FALSE}
+btitle <- paste("Hank Aaron","Batting Average by Year", sep=" ")
+ggplot() + 
+     geom_point(data = HankStats, aes(Age,H/AB*1000,size = OPS)) + 
+     geom_smooth(data = HankStats, aes(Age, H/AB*1000), fill = "red", colour = "darkred") + 
+     geom_hline(yintercept=300) +
+     ggtitle(btitle) + labs(x = "Age", y = "Batting Average", 
+                         caption = "Batting Average by Year")
+
+
+```
+
+
+
+
+```{r OPS_Models, echo=FALSE}
+# Use Lifetime statistics to produce model of OPS ~ Age
+Bonds <- PlayerStats # from above
+Aaron <- HankStats   # from above
+
+# Model Aaron and Bonds career OPS performance
+F1 <- fit.model(Aaron)
+F2 <- fit.model(Bonds)
+
+# Let's Make a Data Table of the model results.
+a_xmin <- min(Aaron$Age); a_xmax <- max(Aaron$Age)
+b_xmin <- min(Bonds$Age); b_xmax <- max(Bonds$Age)
+
+a_predicted <- data.frame(Age = seq(a_xmin, a_xmax, length.out=100))
+b_predicted <- data.frame(Age = seq(b_xmin, b_xmax, length.out=100))
+
+a_predicted$OPS <- predict(F1$fit,a_predicted)
+b_predicted$OPS <- predict(F2$fit,b_predicted)
+
+```
+
+## OPS Models for Aaron and Bonds
+The general model defined by Marchi & Albert in _Analyzing Baseball Data with R_ is expressed by the formula: $$ OPS = A + B(Age - 30) + C(Age - 30)^2 $$
+
+Additional results of this model are:  $$Peak Age = 30 - \frac{B}{2C}$$
+Maximum OPS predicted by the model is: $$Max OPS = \frac{B^2}{4C}$$
+
+### Bonds OPS Model Coefficients
+```{r BondsTable, echo = FALSE}
+knitr::kable(summary(F2$fit)$coef, digits = 3)
+
+```
+
+
+
+### Aaron OPS Model Coefficients
+```{r AaronT, echo = FALSE, results = 'asis'}
+knitr::kable(summary(F1$fit)$coef, digits = 3)
+```
+
+### Aaron and Bonds Coefficients
+
+We will build a table containing the coefficients for each player with labels matching our model nomenclature above.
+
+
+```{r opstable, results = 'asis'}
+# Build table with peak age and max OPS for Aaron and Bonds.
+ops_table <- data.frame(Player = c("Hank Aaron", "Barry Bonds"), 
+                        A = c(F1$fit$coefficients[1], F2$fit$coefficients[1]),
+                        B = c(F1$fit$coefficients[2], F2$fit$coefficients[2]),
+                        C = c(F1$fit$coefficients[3], F2$fit$coefficients[3]))
+ops_table$PA = 30 - (ops_table$B/2*ops_table$C)
+
+knitr::kable(ops_table)
+```
+```{r}
+# 
+```
+
+
+
+```{r PlotOPS, echo = FALSE}
+# Let's plot the OPS data points plus the model trace 
+ggplot(Bonds, aes(Age, OPS, color = brewer.pal(2, "Set3"))) +
+  geom_point(aes(colour = "Bonds", size = HR)) +
+  geom_line(data = b_predicted, aes(color = "Bonds", size=3)) +
+  geom_point(data = Aaron, aes(Age, OPS, color = "Aaron", size = HR)) +
+  geom_line(data = a_predicted, aes(color = "Aaron", size=3))
+color = brewer.pal(6, "Paired")
+
+```
+
 
 \newpage
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 ggplot(data = PlayerStats, aes(Age,cumAvg*1000, color = "Bonds")) + 
-  geom_point() + 
+  geom_point(aes(size = OPS)) + 
   geom_smooth() + 
-  geom_point(data = HankStats, aes(Age, cumAvg * 1000, color = "Aaron")) + 
+  geom_point(data = HankStats, aes(Age, cumAvg * 1000, color = "Aaron", size = OPS)) + 
   geom_smooth(data = HankStats) + 
   geom_hline(yintercept=300) +
   ggtitle("Lifetime Batting Average") + 
@@ -165,31 +265,14 @@ ggplot(data = PlayerStats, aes(Age,HR)) +
 ## Bonds' Cumulative Home Run Production
 
 
-```{r, Ruth,echo = FALSE}
-player.info <- subset(Master, nameFirst == "Babe" & nameLast == "Ruth")
-player.id   <- as.character(player.info$playerID)
-RuthStats <- get_stats(player.id)
-RuthStats <- RuthStats %>% mutate(Cum.HR = cumsum(HR))
-```
-
-```{r, echo=FALSE, message=FALSE, warning=FALSE}
-plot_caption <- paste("Aaron", " - Cumulative Home Run Production", sep="")
-ggplot(data = HankStats, aes(Age,Cum.HR)) + 
-  geom_point() + 
-  geom_line() + 
- 
-  ggtitle("Cumulative Home Run Production") + 
-  labs(x = "Year", y = "Cumulative Home Runs",
-       caption = plot_caption)
-```
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 PlayerStats <- PlayerStats %>% mutate(Cum.HR = cumsum(HR))
 plot_caption <- paste("Aaron versus Bonds", " - Cumulative Home Run Production", sep="")
 ggplot(data = PlayerStats, aes(Age,Cum.HR, color = "Barry Bonds")) + 
-  geom_point() + 
+  geom_point(aes(size = OPS)) + 
   geom_line() + 
-  geom_point(data = HankStats, aes(Age,Cum.HR, color = "Hank Aaron")) +
+  geom_point(data = HankStats, aes(Age,Cum.HR, color = "Hank Aaron", size = OPS)) +
   geom_line(data = HankStats) +
   ggtitle("Cumulative Home Run Production") + 
   labs(x = "Age", y = "Cumulative Home Runs",
@@ -228,4 +311,5 @@ Run date: `r params$runDate`
 
 ["The Father of Baseball" A Biography of Henry Chadwick by Andrew J. Schiff]()
 
-
+["Analyzing Baseball Data with R" by Max Marchi and Jim Albert]()
+siz=

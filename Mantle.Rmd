@@ -14,11 +14,12 @@ subtitle: A Great and Tragic American Sports Hero
 params:
   FirstName: Mickey
   LastName: Mantle
-  runDate: !r Sys.Date()
+  runDate: Sys.Date()
 ---
 
 \centerline{\includegraphics[width=2.0in]{images/Mantle.jpg}}
 
+> It's unbelievable how much you don't know about the game you've been playing all your life.  Mickey Mantle
 
 
 Let me get one thing straight from the outset, I am NOT one of those dedicated baseball fans who remembers events of his life around baseball milestones.  My enjoyment of the game does center around following my hometown Rockies game by game, no matter where I am.  I may occasionally look at the standings for the NW West division and note the number of games my team is out of first place.  I might note the latest streak, wins or losses.  My enjoyment of the game comes in being at the park, taking in the cool Rocky Mountain breezes and talking to friends and family while the game progresses.  I do like looking at the various statistics as each batter comes up; his batting average, on-base percentage and slugging percentage.  I take note of the pitcher's ERA and wins/losses and try to keep an eye out for the total number of pitches.  A relaxing day at Coors Field, that is what I enjoy.
@@ -65,10 +66,10 @@ knitr::kable(PlayerStats[,columns],
            col.names = c.names, digits = 3)
 ```
 
-## Carreer Statistics
+## Career Statistics
 ```{r, echo=FALSE}
 
-Player.car <- get_carreer(PlayerStats)
+Player.car <- get_career(PlayerStats)
 ```
 
 ```{r kable2, results = 'asis', echo = FALSE}
@@ -76,7 +77,7 @@ columns <- c(1:16) # 15 values
 c.names = c("Yrs", "G",  "AB",   "R",   "H",    
             "2B",  "3B", "HR",   "RBI", "BB",   
             "SO",  "SB", "Avg",  "SLG", "OBP",  "OPS")
-knitr::kable(Player.car[,columns], caption = "Mantle's Carreer Statistics", 
+knitr::kable(Player.car[,columns], caption = "Mantle's Career Statistics", 
              col.names = c.names, digits = 3)
 ```
 
@@ -132,5 +133,4 @@ ggplot(data = PlayerStats, aes(Age,OBP)) +
 I hope you enjoyed this statistical journey through a small corner of baseball history.  If you appreciate the power of statistical graphics applied to baseball, please let me know. You can reach me at jdreed@q.com.  Please include "baseball" or "sabermetrics" in the subject line of your email.
 
 
-Run date: `r params$runDate`
-
+Run date: `r Sys.Date()`
